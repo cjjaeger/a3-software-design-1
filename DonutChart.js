@@ -4,8 +4,8 @@
 function donutChart() {
 
     // Set default values
-    var width = 600, 
-        height = 600, 
+    var width = 600,
+        height = 600,
         margin = {top: 150, right:30, bottom:30, left:30},
         color = d3.scaleOrdinal(d3.schemeCategory20c),
         padAngle = 0,
@@ -16,7 +16,7 @@ function donutChart() {
         showTooltip = true, // Boolean for tooltip
         showLabels = true // Boolean for labels
         ;
-        
+
         // Function returned by chart
         function chart(selection) {
             // Chart dimension variables
@@ -32,7 +32,7 @@ function donutChart() {
                 .value(function(d) { return +d[sliceVal] || 0; })
                 .sort(null)
             ;
-            
+
             // Create arc generator for slices
             var arc = d3.arc()
                 .outerRadius(radius)
@@ -40,19 +40,19 @@ function donutChart() {
                 .cornerRadius(cornerRadius)
                 .padAngle(padAngle)
             ;
-            
+
             // Create arc generator for labels
             var label = d3.arc()
                 .outerRadius(radius + 10)
                 .innerRadius(radius + 10)
             ;
-
+            console.log(selection);
             // Iterate through selections
             selection.each(function(data) {
-
+                console.log(data);
                 // Append svg through data-join if necessary
                 var ele = d3.select(this);
-                var svg = ele.selectAll('svg').data(data);                
+                var svg = ele.selectAll('svg').data(data);
 
                 // Append svg to selection
                 var svgEnter = svg.enter().append('svg')
@@ -76,13 +76,13 @@ function donutChart() {
                     .attr('font-weight', 'bold')
                     .style('font-size', '1.5em')
                 ;
-                
+
                 // Append g to svg
                 var g = svgEnter.append('g')
                     .attr('transform', 'translate(' + width/2 + "," + height/2 + ')')
                     .attr('class', 'chart-g')
                 ;
-                
+
                 // Enter paths
                 var path = g.selectAll('.path')
                     .datum(data).data(pie)
@@ -116,10 +116,10 @@ function donutChart() {
                     path.on('mouseover', function(d) {
                         tooltip.html(d.data[sliceCat] + ': <tspan x="0" dy="1.2em">' + d.data[sliceVal] + '</tspan')
                             .style('display', 'block')
-                            .attr('fill', color(d.data[sliceCat]))  
+                            .attr('fill', color(d.data[sliceCat]))
                         ;
                     })
-            
+
                     // Hide tooltip on mouseout
                     path.on('mouseout', function() {
                         tooltip.style('display', 'none');
@@ -136,10 +136,10 @@ function donutChart() {
                     // Rotate to prevent overlap
                     // http://stackoverflow.com/questions/14534024/preventing-overlap-of-text-in-d3-pie-chart
                     g.selectAll('.path').append('text')
-                        .attr("transform", function(d) { 
-                            return "translate(" + label.centroid(d) + ") " + "rotate(" + getAngle(d) + ")"; 
-                        }) 
-                        .attr("dy", 5) 
+                        .attr("transform", function(d) {
+                            return "translate(" + label.centroid(d) + ") " + "rotate(" + getAngle(d) + ")";
+                        })
+                        .attr("dy", 5)
                         .style("text-anchor", "start")
                         .text(function(d) {
                             return d.data[sliceVal] == 0 ? "" : d.data[sliceCat];
@@ -162,7 +162,7 @@ function donutChart() {
     chart.height = function(value) {
         if(!arguments.length) {return height};
         height = value;
-        return chart; 
+        return chart;
     };
 
     // Chart title accessor
